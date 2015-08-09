@@ -57,7 +57,7 @@ export default class Slice extends Component {
     );
   }
 
-  handleClick() {
+  handleClick = () => {
     this.props.onClick && this.props.onClick(this.props.data);
   }
 }
