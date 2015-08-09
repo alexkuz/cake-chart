@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/babel src --stage 0 --out-dir lib",
+    "build": "./node_modules/.bin/babel src --stage 0 --out-dir lib --optional runtime",
     "prepublish": "npm run build",
     "version": "npm publish && git add -A .",
     "postversion": "git push"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "babel": "^5.8.21",
     "babel-eslint": "^4.0.5",
+    "babel-runtime": "^5.8.20",
     "eslint": "^1.1.0",
     "eslint-plugin-react": "^3.2.1"
   },

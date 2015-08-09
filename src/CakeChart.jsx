@@ -239,6 +239,9 @@ export default class CakeChart extends Component {
     const center = getSliceRadius(hole, radius, limit, radiusFactor).end;
     const diameter = center * 2;
     const sliceTree = createSliceTree(data, limit);
+    const centerRule = jss.createRule({
+      transform: `translate(${center}px, ${center}px)`
+    });
 
     return (
       <div className={className}
@@ -260,7 +263,7 @@ export default class CakeChart extends Component {
              xmlns="http://www.w3.org/2000/svg"
              version="1.1"
              className={sheet.classes.svg}>
-          <g style={{transform: `translate(${center}px, ${center}px)`}}>
+          <g style={centerRule.style}>
             <CSSTransitionGroup component={'g'}
                                 transitionName={transitionName}
                                 transitionAppear={true}
