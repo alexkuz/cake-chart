@@ -52,7 +52,7 @@ const sheet = jss.createStyleSheet({
     transform: 'translate(-50%, -50%)',
     padding: '2px 8px',
     'border-radius': '100px',
-    'box-shadow': '2px 4px rgba(66, 66, 66, 0.3)'
+    'box-shadow': '0 2px 4px rgba(66, 66, 66, 0.3)'
   },
   labelActive: {
     cursor: 'pointer'
