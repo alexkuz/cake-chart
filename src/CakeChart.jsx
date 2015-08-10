@@ -9,6 +9,7 @@ import JssVendorPrefixer from 'jss-vendor-prefixer';
 import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import getSliceRadius from './getSliceRadius';
 import getColor from './getColor';
+import classNames from 'classnames';
 
 jss.use(JssVendorPrefixer);
 
@@ -16,19 +17,20 @@ const sheet = jss.createStyleSheet({
   wrapper: {
     position: 'relative'
   },
+
   svg: {
     width: '100%',
     height: '100%'
   },
+
   pieChart: {
     'animation-fill-mode': 'both'
   },
-  slice: {
 
-  },
   activeSlice: {
     cursor: 'pointer'
   },
+
   labels: {
     position: 'absolute',
     top: 0,
@@ -40,8 +42,8 @@ const sheet = jss.createStyleSheet({
     'justify-content': 'center',
     'align-items': 'center'
   },
-  labelsBox: {
-  },
+
+  labelsBox: { },
   label: {
     border: '2px solid #FFFFFF',
     position: 'absolute',
@@ -54,9 +56,11 @@ const sheet = jss.createStyleSheet({
     'border-radius': '100px',
     'box-shadow': '0 2px 4px rgba(66, 66, 66, 0.3)'
   },
+
   labelActive: {
     cursor: 'pointer'
   },
+
   labelsTransition: {
     width: '100vmin',
     height: '100vmin',
@@ -65,27 +69,6 @@ const sheet = jss.createStyleSheet({
 }, { link: true }).attach();
 
 jss.createStyleSheet({
-  [`.${sheet.classes.labelsBox}-appear`]: {
-    opacity: 0
-  },
-  [`.${sheet.classes.labelsBox}-appear-active`]: {
-    opacity: 1,
-    transition: 'opacity 1s ease-out'
-  },
-  [`.${sheet.classes.labelsBox}-enter`]: {
-    opacity: 0
-  },
-  [`.${sheet.classes.labelsBox}-enter-active`]: {
-    opacity: 1,
-    transition: 'opacity 1s ease-out 0.1s'
-  },
-  [`.${sheet.classes.labelsBox}-leave`]: {
-    opacity: 1
-  },
-  [`.${sheet.classes.labelsBox}-leave-active`]: {
-    opacity: 0,
-    transition: 'opacity 0.1s ease-in'
-  }
 }, { named: false }).attach();
 
 let ringSheet = null;
@@ -110,37 +93,59 @@ function createRingClasses(props) {
     ...Array.apply(null, Array(depth + 1)).map((v, k) => k)
       .reduce((rules, idx) => ({
         ...rules,
-        ['ring' + idx]: { }
+        ['ring-' + idx]: { },
+        ['labels-' + idx]: { }
       }), {})
   }).attach();
 
-  const pieChart = props.transitionName;
   const rings = ringSheet.classes;
 
   ringTransitionSheet = jss.createStyleSheet({
     ...Array.apply(null, Array(depth + 1)).map((v, k) => k)
       .reduce((rules, idx) => ({
         ...rules,
-        [`.${pieChart}-appear.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-appear.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)'
         },
-        [`.${pieChart}-appear-active.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-appear-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)',
-          transition: 'transform 0.5s ease-out ' + (idx / 5) + 's'
+          transition: `transform 0.5s ease-out ${(idx / 5)}s`
         },
-        [`.${pieChart}-enter.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-enter.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)'
         },
-        [`.${pieChart}-enter-active.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-enter-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)',
-          transition: 'transform 0.5s ease-out ' + (idx / 5) + 's'
+          transition: `transform 0.5s ease-out ${(idx / 5)}s`
         },
-        [`.${pieChart}-leave.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-leave.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)'
         },
-        [`.${pieChart}-leave-active.${rings['ring' + idx]}`]: {
+        [`.${props.transitionName}-leave-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)',
           transition: 'transform 0.1s ease-in'
+        },
+
+        [`.${props.labelTransitionName}-appear.${rings['labels-' + idx]}`]: {
+          opacity: 0
+        },
+        [`.${props.labelTransitionName}-appear-active.${rings['labels-' + idx]}`]: {
+          opacity: 1,
+          transition: `opacity 0.5s ease-out ${(idx / 5) + 0.2}s`
+        },
+        [`.${props.labelTransitionName}-enter.${rings['labels-' + idx]}`]: {
+          opacity: 0
+        },
+        [`.${props.labelTransitionName}-enter-active.${rings['labels-' + idx]}`]: {
+          opacity: 1,
+          transition: `opacity 0.5s ease-out ${(idx / 5) + 0.2}s`
+        },
+        [`.${props.labelTransitionName}-leave.${rings['labels-' + idx]}`]: {
+          opacity: 1
+        },
+        [`.${props.labelTransitionName}-leave-active.${rings['labels-' + idx]}`]: {
+          opacity: 0,
+          transition: 'opacity 0.1s ease-in'
         }
       }), {})
   }, { named: false }).attach();
@@ -148,9 +153,10 @@ function createRingClasses(props) {
 
 function getLabelProps(slice, idx, pos, props) {
   const hasChildren = slice.data.children && slice.data.children.length;
-  const className = hasChildren ?
-    `${sheet.classes.label} ${sheet.classes.labelActive}` :
-    sheet.classes.label;
+  const className = classNames({
+    [sheet.classes.label]: true,
+    [sheet.classes.labelActive]: hasChildren
+  });
 
   return {
     className,
@@ -189,10 +195,8 @@ export default class CakeChart extends Component {
     }).isRequired,
 
     limit: PropTypes.number,
-    getLabel: PropTypes.func,
     transitionName: PropTypes.string,
-    textTransitionName: PropTypes.string,
-    getSliceClassName: PropTypes.func,
+    labelTransitionName: PropTypes.string,
     className: PropTypes.string,
     getLabelComponent: PropTypes.func
   }
@@ -203,7 +207,7 @@ export default class CakeChart extends Component {
     stroke: '#FFFFFF',
     radiusFactor: 0.7,
     transitionName: sheet.classes.pieChart,
-    textTransitionName: sheet.classes.labelsBox,
+    labelTransitionName: sheet.classes.labelsBox,
     getRingComponent: (block, ...args) => React.createElement(...args),
     getSliceComponent: (slice, idx, ...args) => React.createElement(...args),
     className: sheet.classes.wrapper,
@@ -226,7 +230,7 @@ export default class CakeChart extends Component {
 
   render() {
     const { hole, radius, onClick, getRingComponent, getSliceComponent,
-            style, data, transitionName, textTransitionName,
+            style, data, transitionName, labelTransitionName,
             stroke, strokeWidth, className, limit, radiusFactor } = this.props;
     const center = getSliceRadius(hole, radius, limit, radiusFactor).end;
     const diameter = center * 2;
@@ -241,11 +245,11 @@ export default class CakeChart extends Component {
         <div className={sheet.classes.labels}>
           <CSSTransitionGroup component='div'
                               className={sheet.classes.labelsTransition}
-                              transitionName={textTransitionName}
+                              transitionName={labelTransitionName}
                               transitionAppear={true}>
-            <div key={getKey(data)} className={textTransitionName}>
-              {this.renderTexts(sliceTree, center)}
-            </div>
+            {sliceTree.map((block, idx) =>
+              this.renderTexts(block, center, idx + '-' + getKey(data))
+            )}
           </CSSTransitionGroup>
         </div>
         <svg width='100%'
@@ -261,7 +265,7 @@ export default class CakeChart extends Component {
               {sliceTree.map((block, idx) =>
                   getRingComponent(block, Ring, {
                     key: idx + '-' + (getKey(data)),
-                    className: ringSheet.classes['ring' + block.level],
+                    className: ringSheet.classes['ring-' + block.level],
                     slices: block.slices,
                     level: block.level,
                     hole, radius, center,
@@ -276,11 +280,12 @@ export default class CakeChart extends Component {
     );
   }
 
-  renderTexts(sliceTree, center) {
+  renderTexts(block, center, key) {
     const { getLabelComponent, hole, radius, radiusFactor } = this.props;
 
-    return [
-      for (block of sliceTree)
+    return (
+      <div key={key}
+           className={ringSheet.classes['labels-' + block.level]}>{[
         for (slice of block.slices)
           getLabelComponent(
             slice,
@@ -291,6 +296,8 @@ export default class CakeChart extends Component {
               this.props),
             getLabel(slice)
           )
-    ];
+      ]}
+      </div>
+    );
   }
 }

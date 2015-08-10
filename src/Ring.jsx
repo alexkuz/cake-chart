@@ -4,6 +4,7 @@ import getSliceRadius from './getSliceRadius';
 import Slice from './Slice';
 import getColor from './getColor';
 import jss from 'jss';
+import classNames from 'classnames';
 
 const sheet = jss.createStyleSheet({
   slice: {
@@ -53,7 +54,10 @@ export default class Ring extends Component {
               angle: slice.end - slice.start,
               percentValue: slice.percentValue.toFixed(1),
               fill: getColor(level, idx),
-              className: hasChildren(slice) ? sheet.classes.sliceActive : sheet.classes.slice,
+              className: classNames({
+                [sheet.classes.sliceActive]: hasChildren(slice),
+                [sheet.classes.slice]: true
+              }),
               stroke, strokeWidth, sliceRadius, onClick, level
             })
         )}

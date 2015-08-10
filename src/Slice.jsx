@@ -47,13 +47,11 @@ export default class Slice extends Component {
   }
 
   render () {
+    const { fill, stroke, strokeWidth, className } = this.props;
     return (
       <path d={this.drawPath()}
-            fill={this.props.fill}
-            stroke={this.props.stroke}
-            strokeWidth={this.props.strokeWidth}
             onClick={this.handleClick}
-            className={this.props.className} />
+            {...{ fill, stroke, strokeWidth, className }} />
     );
   }
 
