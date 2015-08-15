@@ -95,31 +95,28 @@ class InteractiveCakeChart extends React.Component {
 
 ```js
 
-function getSliceComponent(slice, Component, props) {
-  return <Component {...props}
-                    fill={(slice.level % 2) ? '#FF0000' : '#0000FF'} />;
+function getSliceProps(slice, props) {
+  return { ...props, fill: (slice.level % 2) ? '#FF0000' : '#0000FF' };
 }
 
-function getLabelComponent(slice, Component, props) {
-  const label = slice.level === 0 ? `Value: ${slice.node.value}` : props.children;
+function getLabel(slice, label) {
+  return slice.level === 0 ? `Value: ${slice.node.value}` : label;
+}
 
-  return (
-    <Component {...props}
-               style={{ background: (slice.level % 2) ? '#FF0000' : '#0000FF' }}>
-      {label}
-    </Component>
-  );
+function getLabelProps(slice, props) {
+  return { ...props, style: { background: (slice.level % 2) ? '#FF0000' : '#0000FF' } };
 }
 
 class CustomizedCakeChart extends React.Component {
   render() {
     return (
       <CakeChart data={TREE}
-                 radius={120}
+                 coreRadius={120}
                  ringWidth={80}
                  ringWidthFactor={0.6}
-                 getSliceComponent={getSliceComponent}
-                 getLabelComponent={getLabelComponent} />
+                 getSliceProps={getSliceProps}
+                 getLabelProps={getLabelProps}
+                 getLabel={getLabel} />
     );
   }
 }
