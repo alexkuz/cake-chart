@@ -1,19 +1,19 @@
-function reduceAngleTree(angleTree, slice, sum, level, limit) {
-  const angle = (slice.value / sum) * 360;
-  const percentValue = (slice.value / sum) * 100;
+function reduceAngleTree(angleTree, node, sum, level, limit) {
+  const angle = (node.value / sum) * 360;
+  const percentValue = (node.value / sum) * 100;
 
   return {
     angle: angleTree.angle + angle,
     tree: [...angleTree.tree, {
-      data: slice,
+      node,
       start: angleTree.angle,
       end: angleTree.angle + angle,
-      level: level,
-      value: slice.value,
-      percentValue: percentValue
+      level,
+      value: node.value,
+      percentValue
     }, ...(
-      level < limit && slice.children ?
-        slice.children.reduce(
+      level < limit && node.children ?
+        node.children.reduce(
           (at, s) => reduceAngleTree(at, s, sum, level + 1, limit),
           { angle: angleTree.angle, tree: [] }
         ).tree :
@@ -22,11 +22,11 @@ function reduceAngleTree(angleTree, slice, sum, level, limit) {
   };
 }
 
-export default function createSliceTree(data, limit) {
-  const sum = data.value;
+export default function createSliceTree(rootNode, limit) {
+  const sum = rootNode.value;
 
-  const tree = data.children.reduce(
-    (angleTree, slice) => reduceAngleTree(angleTree, slice, sum, 1, limit),
+  const tree = rootNode.children.reduce(
+    (angleTree, node) => reduceAngleTree(angleTree, node, sum, 1, limit),
     { angle: 0, tree: [] }
   ).tree;
 
@@ -37,12 +37,12 @@ export default function createSliceTree(data, limit) {
         return t;
       },
       []
-    ).map((slices, idx) => ({ level: idx + 1, slices: slices }))
+    ).map((slices, idx) => ({ level: idx + 1, slices }))
     .sort((a, b) => b.level - a.level),
     {
       level: 0,
       slices: [{
-        data: data,
+        node: rootNode,
         start: 0,
         end: 360,
         value: sum,

@@ -37,7 +37,7 @@ export default class Ring extends Component {
     const { slices, level, sliceRadiusRange, center, stroke, strokeWidth,
             onClick, className, getSliceProps, sheet: { classes } } = this.props;
     const rectSize = sliceRadiusRange.end + 20;
-    const hasChildren = s => s.data.children && s.data.children.length > 0;
+    const hasChildren = s => s.node.children && s.node.children.length > 0;
 
     return (
       <g className={className}>
@@ -47,7 +47,7 @@ export default class Ring extends Component {
         {slices.map((slice, idx) =>
           <Slice {...getSliceProps(slice, idx, {
             key: idx,
-            data: slice.data,
+            node: slice.node,
             angleRange: { start: slice.start, end: slice.end },
             percentValue: slice.percentValue.toFixed(1),
             fill: getDefaultColor(level, idx),

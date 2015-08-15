@@ -47,13 +47,13 @@ function attachRingSheets(props) {
 }
 
 function getDefaultLabel(slice) {
-  return (slice.end - slice.start > 15) && (slice.data.label || slice.data.value);
+  return (slice.end - slice.start > 15) && (slice.node.label || slice.node.value);
 }
 
 function getDefaultLabelProps(slice, idx, center, props, classes) {
   const { coreRadius, ringWidth, ringWidthFactor } = props;
   const pos = getTextCoordinates(slice, coreRadius, ringWidth, center, ringWidthFactor);
-  const hasChildren = slice.data.children && slice.data.children.length;
+  const hasChildren = slice.node.children && slice.node.children.length;
   const className = classNames({
     [classes.label]: true,
     [classes.labelActive]: hasChildren
@@ -69,12 +69,12 @@ function getDefaultLabelProps(slice, idx, center, props, classes) {
       display: label ? 'block' : 'none'
     },
     key: slice.level + '-' + idx,
-    onClick: props.onClick.bind(null, slice.data)
+    onClick: props.onClick.bind(null, slice.node)
   }
 }
 
-function getDefaultKey(data) {
-  return data.key || (data.label + '-' + data.value);
+function getDefaultKey(node) {
+  return node.key || (node.label + '-' + node.value);
 }
 
 @useSheet(sheet, { link: true })
@@ -110,7 +110,7 @@ export default class CakeChart extends Component {
     getSliceProps: (slice, idx, props) => props,
     getLabelProps: (slice, idx, props) => props,
     getLabel: (slice, label) => label,
-    getKey: (data, key) => key
+    getKey: (node, key) => key
   }
 
   componentWillMount() {

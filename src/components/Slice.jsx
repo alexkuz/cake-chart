@@ -17,7 +17,8 @@ export default class Slice extends Component {
     fill: PropTypes.string,
     strokeWidth: PropTypes.number,
     className: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    node: PropTypes.any
   }
 
   static defaultProps = {
@@ -56,6 +57,6 @@ export default class Slice extends Component {
   }
 
   handleClick = () => {
-    this.props.onClick && this.props.onClick(this.props.data);
+    this.props.onClick && this.props.onClick(this.props.node);
   }
 }
