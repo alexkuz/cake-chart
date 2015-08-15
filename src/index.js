@@ -1,3 +1,3 @@
-import CakeChart from './CakeChart';
+import CakeChart from './components/CakeChart';
 
 export default CakeChart;
