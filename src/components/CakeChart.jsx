@@ -12,6 +12,7 @@ import getDefaultColor from '../utils/getDefaultColor';
 import classNames from 'classnames';
 import { sheet, createDefaultSheets } from '../utils/defaultSheets';
 import useSheet from 'react-jss';
+import throttle from 'lodash.throttle';
 
 jss.use(JssVendorPrefixer);
 
@@ -117,14 +118,35 @@ export default class CakeChart extends Component {
     attachRingSheets(this.props);
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', this.debouncedWindowResize);
+    this.updateLabelsSize();
+  }
+
   componentWillUpdate(nextProps) {
     if (nextProps.limit !== this.props.limit) {
       attachRingSheets(nextProps);
     }
+    this.updateLabelsSize();
   }
 
   componentWillUnount() {
     detachRingSheets();
+    window.removeEventListener('resize', this.debouncedWindowResize);
+  }
+
+  handleWindowResize = () => {
+    window.requestAnimationFrame(this.updateLabelsSize);
+  }
+
+  debouncedWindowResize = throttle(this.handleWindowResize, 50)
+
+  updateLabelsSize = () => {
+    const labelsEl = React.findDOMNode(this.refs.labels);
+    const containerEl = React.findDOMNode(this.refs.container);
+    const size = Math.min(containerEl.offsetHeight, containerEl.offsetWidth);
+    labelsEl.style.height = size + 'px';
+    labelsEl.style.width = size + 'px';
   }
 
   render() {
@@ -144,12 +166,14 @@ export default class CakeChart extends Component {
 
     return (
       <div className={className}
-           style={style}>
+           style={style}
+           ref='container'>
         <div className={classes.labels}>
           <CSSTransitionGroup component='div'
                               className={classes.labelsTransition}
                               transitionName={labelTransitionName}
-                              transitionAppear={true}>
+                              transitionAppear={true}
+                              ref='labels'>
             {sliceTree.map((block, idx) =>
               this.renderTexts(block, center, `${idx}-${key}`)
             )}

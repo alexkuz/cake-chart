@@ -49,8 +49,6 @@ export const sheet = {
   },
 
   labelsTransition: {
-    width: '100vmin',
-    height: '100vmin',
     position: 'relative'
   }
 };
