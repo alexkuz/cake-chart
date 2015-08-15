@@ -1,6 +1,6 @@
 {
   "name": "cake-chart",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Interactive multi-layer pie chart",
   "main": "lib/index.js",
   "scripts": {
