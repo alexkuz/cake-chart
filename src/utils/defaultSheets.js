@@ -67,50 +67,53 @@ export function createDefaultSheets(props) {
 
   const rings = ringSheet.classes;
 
+  const trName = props.transitionName;
+  const labelTrName = props.labelTransitionName;
+
   const ringTransitionSheet = jss.createStyleSheet({
     ...Array.apply(null, Array(depth + 1)).map((v, k) => k)
       .reduce((rules, idx) => ({
         ...rules,
-        [`.${props.transitionName}-appear.${rings['ring-' + idx]}`]: {
+        [`.${trName}-appear.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)'
         },
-        [`.${props.transitionName}-appear-active.${rings['ring-' + idx]}`]: {
+        [`.${trName}-appear.${trName}-appear-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)',
           transition: `transform 0.5s ease-out ${(idx / 5)}s`
         },
-        [`.${props.transitionName}-enter.${rings['ring-' + idx]}`]: {
+        [`.${trName}-enter.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)'
         },
-        [`.${props.transitionName}-enter-active.${rings['ring-' + idx]}`]: {
+        [`.${trName}-enter.${trName}-enter-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)',
           transition: `transform 0.5s ease-out ${(idx / 5)}s`
         },
-        [`.${props.transitionName}-leave.${rings['ring-' + idx]}`]: {
+        [`.${trName}-leave.${rings['ring-' + idx]}`]: {
           transform: 'scale(1)'
         },
-        [`.${props.transitionName}-leave-active.${rings['ring-' + idx]}`]: {
+        [`.${trName}-leave.${trName}-leave-active.${rings['ring-' + idx]}`]: {
           transform: 'scale(0.5)',
           transition: 'transform 0.1s ease-in'
         },
 
-        [`.${props.labelTransitionName}-appear.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-appear.${rings['labels-' + idx]}`]: {
           opacity: 0
         },
-        [`.${props.labelTransitionName}-appear-active.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-appear.${labelTrName}-appear-active.${rings['labels-' + idx]}`]: {
           opacity: 1,
           transition: `opacity 0.5s ease-out ${(idx / 5) + 0.2}s`
         },
-        [`.${props.labelTransitionName}-enter.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-enter.${rings['labels-' + idx]}`]: {
           opacity: 0
         },
-        [`.${props.labelTransitionName}-enter-active.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-enter.${labelTrName}-enter-active.${rings['labels-' + idx]}`]: {
           opacity: 1,
           transition: `opacity 0.5s ease-out ${(idx / 5) + 0.2}s`
         },
-        [`.${props.labelTransitionName}-leave.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-leave.${rings['labels-' + idx]}`]: {
           opacity: 1
         },
-        [`.${props.labelTransitionName}-leave-active.${rings['labels-' + idx]}`]: {
+        [`.${labelTrName}-leave.${labelTrName}-leave-active.${rings['labels-' + idx]}`]: {
           opacity: 0,
           transition: 'opacity 0.1s ease-in'
         }
