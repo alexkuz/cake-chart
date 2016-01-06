@@ -1,6 +1,7 @@
 // http://codepen.io/maydie/details/OVmxZZ
 
 import React, { Component, PropTypes } from 'react';
+import dft from '../utils/treeUtils.js';
 import getTextCoordinates from '../utils/getTextCoordinates';
 import createSliceTree from '../utils/createSliceTree';
 import Ring from './Ring';
@@ -111,7 +112,21 @@ export default class CakeChart extends Component {
     getSliceProps: (slice, idx, props) => props,
     getLabelProps: (slice, idx, props) => props,
     getLabel: (slice, label) => label,
+    getTitle: (slice, title) => title,
     getKey: (node, key) => key
+  }
+
+  constructor(props) {
+    super(props);
+    this.initProps(props);
+  }
+
+  initProps = (props) => {
+    Array.from(dft(props.data, x => x.children)).forEach(node => node.title = node.title === undefined ? node.label : node.title);
+  }
+
+  componentWillReceiveProps(props) {
+    this.initProps(props);
   }
 
   componentWillMount() {
@@ -152,7 +167,7 @@ export default class CakeChart extends Component {
   render() {
     const { sheet: { classes } } = this.props;
     const { coreRadius, ringWidth, onClick, getRingProps, getSliceProps,
-            style, data, getKey, stroke, strokeWidth, limit, ringWidthFactor,
+            style, data, getKey, stroke, strokeWidth, limit, ringWidthFactor, getTitle,
             transitionName = classes.pieChart,
             labelTransitionName = classes.labelsBox,
             className = classes.wrapper } = this.props;
@@ -202,7 +217,7 @@ export default class CakeChart extends Component {
                     ringWidthFactor
                   ),
                   center, getSliceProps,
-                  stroke, strokeWidth, onClick
+                  stroke, strokeWidth, onClick, getTitle
                 })} />
               )}
             </CSSTransitionGroup>

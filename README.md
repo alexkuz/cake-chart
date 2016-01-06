@@ -67,19 +67,19 @@ function findParentNode(node, child, parent = null) {
 class InteractiveCakeChart extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       selectedNode: TREE
     }
   }
-  
+
   render() {
     return (
       <CakeChart data={this.state.selectedNode}
                  onClick={this.handleClick} />
     );
   }
-  
+
   handleClick = (node) => {
     if (node === this.state.selectedNode) {
       /* user clicked on the chart center - rendering parent node */
@@ -99,12 +99,16 @@ function getSliceProps(slice, props) {
   return { ...props, fill: (slice.level % 2) ? '#FF0000' : '#0000FF' };
 }
 
+function getLabelProps(slice, props) {
+  return { ...props, style: { background: (slice.level % 2) ? '#FF0000' : '#0000FF' } };
+}
+
 function getLabel(slice, label) {
   return slice.level === 0 ? `Value: ${slice.node.value}` : label;
 }
 
-function getLabelProps(slice, props) {
-  return { ...props, style: { background: (slice.level % 2) ? '#FF0000' : '#0000FF' } };
+function getTitle(slice, title) {
+  return slice.level === 0 ? `Value: ${slice.node.value}` : title;
 }
 
 class CustomizedCakeChart extends React.Component {
@@ -116,7 +120,8 @@ class CustomizedCakeChart extends React.Component {
                  ringWidthFactor={0.6}
                  getSliceProps={getSliceProps}
                  getLabelProps={getLabelProps}
-                 getLabel={getLabel} />
+                 getLabel={getLabel}
+                 getTitle={getTitle} />
     );
   }
 }

@@ -23,6 +23,7 @@ export default class Ring extends Component {
     strokeWidth: Slice.propTypes.strokeWidth,
     sliceRadiusRange: Slice.propTypes.sliceRadiusRange,
     onClick: Slice.propTypes.onClick,
+    getTitle: PropTypes.func,
 
     level: PropTypes.number.isRequired,
     center: PropTypes.number.isRequired,
@@ -35,7 +36,7 @@ export default class Ring extends Component {
 
   render() {
     const { slices, level, sliceRadiusRange, center, stroke, strokeWidth,
-            onClick, className, getSliceProps, sheet: { classes } } = this.props;
+            onClick, getTitle, className, getSliceProps, sheet: { classes } } = this.props;
     const rectSize = sliceRadiusRange.end + 20;
     const hasChildren = s => s.node.children && s.node.children.length > 0;
 
@@ -55,7 +56,8 @@ export default class Ring extends Component {
               [classes.sliceActive]: hasChildren(slice),
               [classes.slice]: true
             }),
-            stroke, strokeWidth, sliceRadiusRange, onClick, level
+            stroke, strokeWidth, sliceRadiusRange, onClick, level,
+            title: getTitle(slice, slice.node.title)
           })} />
         )}
       </g>

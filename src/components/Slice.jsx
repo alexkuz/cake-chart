@@ -52,7 +52,9 @@ export default class Slice extends Component {
     return (
       <path d={this.drawPath()}
             onClick={this.handleClick}
-            {...{ fill, stroke, strokeWidth, className }} />
+            {...{ fill, stroke, strokeWidth, className }}>
+        <title>{this.props.title}</title>
+      </path>
     );
   }
 
