@@ -15,7 +15,7 @@ Interactive multi-layer pie chart
 
 ### Simple Example
 
-```
+```js
 import CakeChart from 'cake-chart';
 
 const TREE = {
@@ -36,7 +36,7 @@ const TREE = {
   }]
 };
 
-...
+// ...
 
 render () {
   return (
